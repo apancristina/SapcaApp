@@ -19,7 +19,7 @@ import com.example.android.apanc.app.asyncTask.StartGameAsyncTask;
  */
 public class GameFragment extends Fragment implements AsyncResponse {
 
-    private static final String GAME_ID = "com.example.android.apanc.app.GAME_ID";
+    public static final String GAME_ID = "com.example.android.apanc.app.GAME_ID";
     private Context context;
     private Button button2Teams;
     private Button button3Teams;
@@ -86,7 +86,7 @@ public class GameFragment extends Fragment implements AsyncResponse {
     public void processFinish(String result) {
         textView2Teams.setText(result);
         Intent intent = new Intent(context, GameRoundActivity.class);
-        //intent.putExtra(GAME_ID, result);
+        intent.putExtra(GAME_ID, result);
         startActivity(intent);
     }
 

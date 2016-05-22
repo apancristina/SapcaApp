@@ -10,6 +10,12 @@ public class GameRoundActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_round);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.game_round_fragment, new GameRoundActivityFragment())
+                    .commit();
+        }
     }
 
 }
