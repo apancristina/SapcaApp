@@ -1,13 +1,20 @@
 package com.example.android.apanc.app.client;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
+import android.util.JsonReader;
 
+import com.example.android.apanc.app.Model.Round;
 import com.example.android.apanc.app.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.HttpUrl;
@@ -38,8 +45,8 @@ public class SapcaClient {
         return executeCall(buildGameRequest("game", gameId));
     }
 
-    public String nextRound(String gameId) throws IOException {
-        return executeCall(buildGameRequest("nextRound", gameId));
+    public Round nextRound(String gameId) throws IOException {
+        return getRound(buildGameRequest("nextRound", gameId));
     }
 
     public String addPoints(String gameId) throws IOException {
@@ -66,6 +73,71 @@ public class SapcaClient {
                 //call.
             }
         }
+    }
+
+    private Round getRound(Request request) throws IOException {
+        Response response;
+        Call call = null;
+        try {
+            call = client.newCall(request);
+            response = call.execute();
+            return readRound(response.body().byteStream());
+        } catch (IOException e) {
+            //Log.e(TAG, "doInBack", e); // show to user
+            throw e;
+        } finally {
+            if (call != null) {
+                //call.
+            }
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private Round readRound(InputStream inputStream) throws IOException {
+        Round round = new Round();
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
+        reader.beginObject();
+        while (reader.hasNext()) { // todo instances exist
+            String name = reader.nextName();
+            switch (name) {
+                case "text":
+                    round.setText(reader.nextString());
+                    break;
+                case "points":
+                    round.setRoundPoints(reader.nextInt());
+                    break;
+                case "options":
+                    round.setOptions(reader.nextString());
+                    break;
+                case "team":
+                    round = readTeam(reader, round);
+                    break;
+                default:
+                    reader.skipValue();
+                    break;
+            }
+        }
+        reader.endObject();
+        reader.close();
+        return round;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private Round readTeam(JsonReader reader, Round round) throws IOException {
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            switch (name) {
+                case "color":
+                    round.setTeamColour(reader.nextString());
+                    break;
+                default:
+                    reader.skipValue();
+                    break;
+            }
+        }
+        reader.endObject();
+        return round;
     }
 
     private String readResponse(InputStream inputStream) throws IOException {

@@ -1,4 +1,4 @@
-package com.example.android.apanc.app.asyncTask;
+package com.example.android.apanc.app.async.task;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Created by apanc on 22-May-16.
  */
-public class GameDetailsAsycTask extends AbstractAsyncTask {
+public class GameDetailsAsycTask extends AbstractAsyncTask<String> {
 
     public GameDetailsAsycTask(Context context) {
         super(context);
@@ -24,5 +24,10 @@ public class GameDetailsAsycTask extends AbstractAsyncTask {
             e.printStackTrace();
         }
         return response;
+    }
+
+    @Override
+    protected void onPostExecute(String response) {
+        delegate.processFinish(response);
     }
 }

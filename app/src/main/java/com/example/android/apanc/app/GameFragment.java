@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.android.apanc.app.asyncTask.AsyncResponse;
-import com.example.android.apanc.app.asyncTask.StartGameAsyncTask;
+import com.example.android.apanc.app.async.response.AsyncResponse;
+import com.example.android.apanc.app.async.task.StartGameAsyncTask;
 
 /**
  * Created by apanc on 21-May-16.
  */
-public class GameFragment extends Fragment implements AsyncResponse {
+public class GameFragment extends Fragment implements AsyncResponse<String> {
 
     public static final String GAME_ID = "com.example.android.apanc.app.GAME_ID";
     private Context context;
@@ -53,8 +53,8 @@ public class GameFragment extends Fragment implements AsyncResponse {
             @Override
             public void onClick(View view) {
                 StartGameAsyncTask startGameAsyncTask = new StartGameAsyncTask(context);
-                //this to set delegate/listener back to this class
-                startGameAsyncTask.delegate = GameFragment.this;
+                //this to set comparable/listener back to this class
+                startGameAsyncTask.comparable = GameFragment.this;
                 startGameAsyncTask.execute(button2Teams.getText().toString());
             }
         });
@@ -63,8 +63,8 @@ public class GameFragment extends Fragment implements AsyncResponse {
             @Override
             public void onClick(View view) {
                 StartGameAsyncTask startGameAsyncTask = new StartGameAsyncTask(context);
-                //this to set delegate/listener back to this class
-                startGameAsyncTask.delegate = GameFragment.this;
+                //this to set comparable/listener back to this class
+                startGameAsyncTask.comparable = GameFragment.this;
                 startGameAsyncTask.execute(button3Teams.getText().toString());
             }
         });
@@ -73,8 +73,8 @@ public class GameFragment extends Fragment implements AsyncResponse {
             @Override
             public void onClick(View view) {
                 StartGameAsyncTask startGameAsyncTask = new StartGameAsyncTask(context);
-                //this to set delegate/listener back to this class
-                startGameAsyncTask.delegate = GameFragment.this;
+                //this to set comparable/listener back to this class
+                startGameAsyncTask.comparable = GameFragment.this;
                 startGameAsyncTask.execute(button4Teams.getText().toString());
             }
         });*/
@@ -94,7 +94,7 @@ public class GameFragment extends Fragment implements AsyncResponse {
     @Override
     public void onClick(View view) {
         StartGameAsyncTask startGameAsyncTask = new StartGameAsyncTask(context);
-        //this to set delegate/listener back to this class
+        //this to set comparable/listener back to this class
         startGameAsyncTask.delegate = GameFragment.this;
 
         switch (view.getId()) {

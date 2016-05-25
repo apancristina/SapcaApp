@@ -13,9 +13,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="placeholder"
+        android:text="game id here"
         android:id="@+id/testViewGameId"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginBottom="61dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/ROUND_DETAILS"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/correctBUtton" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="correct"
+        android:id="@+id/correctBUtton"
+        android:layout_marginBottom="38dp"
+        android:layout_above="@+id/testViewGameId"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/testViewGameId"
+        android:layout_toLeftOf="@+id/testViewGameId" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="wrong"
+        android:id="@+id/wrongButton"
+        android:layout_alignTop="@+id/correctBUtton"
+        android:layout_alignRight="@+id/ROUND_DETAILS"
+        android:layout_alignEnd="@+id/ROUND_DETAILS"
+        android:layout_toEndOf="@+id/testViewGameId" />
 </RelativeLayout>
