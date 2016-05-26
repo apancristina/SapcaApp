@@ -28,13 +28,13 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/correctBUtton" />
+        android:layout_above="@+id/CORRECT_BUTTON" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="correct"
-        android:id="@+id/correctBUtton"
+        android:id="@+id/CORRECT_BUTTON"
         android:layout_marginBottom="38dp"
         android:layout_above="@+id/testViewGameId"
         android:layout_alignParentLeft="true"
@@ -46,8 +46,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="wrong"
-        android:id="@+id/wrongButton"
-        android:layout_alignTop="@+id/correctBUtton"
+        android:id="@+id/WRONG_BUTTON"
+        android:layout_alignTop="@+id/CORRECT_BUTTON"
         android:layout_alignRight="@+id/ROUND_DETAILS"
         android:layout_alignEnd="@+id/ROUND_DETAILS"
         android:layout_toEndOf="@+id/testViewGameId" />

@@ -5,7 +5,7 @@ package com.example.android.apanc.app.Model;
  */
 public class Round {
     private String text;
-    private int roundPoints;
+    private String roundPoints;
     private String options;
     private String teamId;
     private String teamColour;
@@ -21,11 +21,11 @@ public class Round {
         this.text = text;
     }
 
-    public int getRoundPoints() {
+    public String getRoundPoints() {
         return roundPoints;
     }
 
-    public void setRoundPoints(int roundPoints) {
+    public void setRoundPoints(String roundPoints) {
         this.roundPoints = roundPoints;
     }
 

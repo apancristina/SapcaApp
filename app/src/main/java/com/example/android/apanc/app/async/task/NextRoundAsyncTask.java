@@ -2,7 +2,6 @@ package com.example.android.apanc.app.async.task;
 
 import android.content.Context;
 
-import com.example.android.apanc.app.async.response.AsyncResponse;
 import com.example.android.apanc.app.Model.Round;
 
 import java.io.IOException;

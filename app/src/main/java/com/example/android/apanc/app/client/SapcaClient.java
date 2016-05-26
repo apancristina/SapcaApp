@@ -12,9 +12,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.HttpUrl;
@@ -42,19 +39,32 @@ public class SapcaClient {
     }
 
     public String getGame(String gameId) throws IOException {
-        return executeCall(buildGameRequest("game", gameId));
+        return executeCall(buildGameDetailsRequest(gameId));
     }
 
     public Round nextRound(String gameId) throws IOException {
-        return getRound(buildGameRequest("nextRound", gameId));
+        return getRound(buildNextRoundRequest(gameId));
     }
 
-    public String addPoints(String gameId) throws IOException {
-        return executeCall(buildGameRequest("addPoints", gameId));
+    public String addPoints(String teamId, String points) throws IOException {
+        Response response;
+        Call call = null;
+        try {
+            call = client.newCall(buildAddPointsRequest(teamId, points));
+            response = call.execute();
+            return readResponse(response.body().byteStream());
+        } catch (IOException e) {
+            //Log.e(TAG, "doInBack", e); // show to user
+            throw e;
+        } finally {
+            if (call != null) {
+                //call.
+            }
+        }
     }
 
     public String getWebping() throws IOException {
-        return executeCall(buildGameRequest("webping"));
+        return executeCall(buildGameDetailsRequest("webping"));
     }
 
     //TODO handle failure more pleasantly
@@ -81,15 +91,19 @@ public class SapcaClient {
         try {
             call = client.newCall(request);
             response = call.execute();
-            return readRound(response.body().byteStream());
+            if (response.isSuccessful()) {
+                return readRound(response.body().byteStream());
+            } else {
+                response.body().close();
+            }
         } catch (IOException e) {
             //Log.e(TAG, "doInBack", e); // show to user
             throw e;
         } finally {
             if (call != null) {
-                //call.
             }
         }
+        return null;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -104,7 +118,7 @@ public class SapcaClient {
                     round.setText(reader.nextString());
                     break;
                 case "points":
-                    round.setRoundPoints(reader.nextInt());
+                    round.setRoundPoints(reader.nextString());
                     break;
                 case "options":
                     round.setOptions(reader.nextString());
@@ -128,6 +142,9 @@ public class SapcaClient {
         while (reader.hasNext()) {
             String name = reader.nextName();
             switch (name) {
+                case "id":
+                    round.setTeamId(reader.nextString());
+                    break;
                 case "color":
                     round.setTeamColour(reader.nextString());
                     break;
@@ -150,21 +167,41 @@ public class SapcaClient {
         return builder.toString();
     }
 
-    private Request buildGameRequest(String... params) {
+    private Request buildStartGameRequest(String... params) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(context.getString(R.string.sapca_url)).newBuilder();
-        for (String p : params) {
-            urlBuilder.addPathSegment(p);
-        }
+        urlBuilder.addPathSegment("startGame");
+        urlBuilder.addQueryParameter("noOfTeams", params[0]);
         String url = urlBuilder.build().toString();
         return new Request.Builder()
                 .url(url)
                 .build();
     }
 
-    private Request buildStartGameRequest(String... params) {
+    private Request buildGameDetailsRequest(String... params) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(context.getString(R.string.sapca_url)).newBuilder();
-        urlBuilder.addPathSegment("startGame");
-        urlBuilder.addQueryParameter("noOfTeams", params[0]);
+        urlBuilder.addPathSegment("game");
+        urlBuilder.addPathSegment(params[0]);
+        String url = urlBuilder.build().toString();
+        return new Request.Builder()
+                .url(url)
+                .build();
+    }
+
+    private Request buildNextRoundRequest(String... params){
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(context.getString(R.string.sapca_url)).newBuilder();
+        urlBuilder.addPathSegment("nextRound");
+        urlBuilder.addPathSegment(params[0]);
+        String url = urlBuilder.build().toString();
+        return new Request.Builder()
+                .url(url)
+                .build();
+    }
+
+    private Request buildAddPointsRequest(String... params) {
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(context.getString(R.string.sapca_url)).newBuilder();
+        urlBuilder.addPathSegment("addPoints");
+        urlBuilder.addPathSegment(params[0]);
+        urlBuilder.addQueryParameter("points", params[1]);
         String url = urlBuilder.build().toString();
         return new Request.Builder()
                 .url(url)
