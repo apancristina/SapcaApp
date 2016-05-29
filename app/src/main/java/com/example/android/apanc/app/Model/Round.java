@@ -1,17 +1,17 @@
-package com.example.android.apanc.app.Model;
+package com.example.android.apanc.app.model;
 
 /**
  * Created by apanc on 25-May-16.
  */
 public class Round {
     private String text;
-    private String roundPoints;
+    private String points;
     private String options;
-    private String teamId;
-    private String teamColour;
+    private Team team;
 
-
-
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     public String getText() {
         return text;
@@ -21,12 +21,12 @@ public class Round {
         this.text = text;
     }
 
-    public String getRoundPoints() {
-        return roundPoints;
+    public String getPoints() {
+        return points;
     }
 
-    public void setRoundPoints(String roundPoints) {
-        this.roundPoints = roundPoints;
+    public void setPoints(String points) {
+        this.points = points;
     }
 
     public String getOptions() {
@@ -37,19 +37,7 @@ public class Round {
         this.options = options;
     }
 
-    public String getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(String teamId) {
-        this.teamId = teamId;
-    }
-
-    public String getTeamColour() {
-        return teamColour;
-    }
-
-    public void setTeamColour(String teamColour) {
-        this.teamColour = teamColour;
+    public Team getTeam() {
+        return team;
     }
 }

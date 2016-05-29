@@ -3,26 +3,26 @@ package com.example.android.apanc.app.async.task;
 import android.content.Context;
 
 import com.example.android.apanc.app.GameRoundActivityFragment;
+import com.example.android.apanc.app.model.Game;
 
 import java.io.IOException;
 
 /**
- * Created by apanc on 26-May-16.
+ * Created by apanc on 22-May-16.
  */
-public class AddPointsAsyncTask extends AbstractAsyncTask<String> {
+public class GameDetailsAsyncTask extends AbstractAsyncTask<Game> {
 
     public GameRoundActivityFragment fragment;
-
-    public AddPointsAsyncTask(Context context) {
+    public GameDetailsAsyncTask(Context context) {
         super(context);
     }
 
     @Override
-    protected String doInBackground(String... strings) {
-        String response = "";
+    protected Game doInBackground(String... strings) {
+        Game response = null;
         try {
             if (strings.length != 0) {
-                response = sapcaClient.addPoints(strings[0], strings[1]);
+                response = sapcaClient.getGame(strings[0]);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,7 +31,8 @@ public class AddPointsAsyncTask extends AbstractAsyncTask<String> {
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        fragment.finishAddPoints(response);
+    protected void onPostExecute(Game response) {
+
+        fragment.finishProcessGameDetails(response);
     }
 }

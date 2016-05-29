@@ -24,7 +24,6 @@ public class GameFragment extends Fragment implements AsyncResponse<String> {
     private Button button2Teams;
     private Button button3Teams;
     private Button button4Teams;
-    private TextView textView2Teams;
 
     public GameFragment() {
     }
@@ -40,51 +39,18 @@ public class GameFragment extends Fragment implements AsyncResponse<String> {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        textView2Teams = (TextView) rootView.findViewById(R.id.textViewTeamButtonResponse);
         button2Teams = (Button) rootView.findViewById(R.id.button_2_teams);
         button2Teams.setOnClickListener(this);
         button3Teams = (Button) rootView.findViewById(R.id.button_3_teams);
         button3Teams.setOnClickListener(this);
         button4Teams = (Button) rootView.findViewById(R.id.button_4_teams);
         button4Teams.setOnClickListener(this);
-        //TODO reuse same onclick listener for each button
-        /*final Button button2Teams = (Button) rootView.findViewById(R.id.button_2_teams);
-        button2Teams.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                StartGameAsyncTask startGameAsyncTask = new StartGameAsyncTask(context);
-                //this to set comparable/listener back to this class
-                startGameAsyncTask.comparable = GameFragment.this;
-                startGameAsyncTask.execute(button2Teams.getText().toString());
-            }
-        });
-        final Button button3Teams = (Button) rootView.findViewById(R.id.button_3_teams);
-        button3Teams.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                StartGameAsyncTask startGameAsyncTask = new StartGameAsyncTask(context);
-                //this to set comparable/listener back to this class
-                startGameAsyncTask.comparable = GameFragment.this;
-                startGameAsyncTask.execute(button3Teams.getText().toString());
-            }
-        });
-        final Button button4Teams = (Button) rootView.findViewById(R.id.button_4_teams);
-        button4Teams.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                StartGameAsyncTask startGameAsyncTask = new StartGameAsyncTask(context);
-                //this to set comparable/listener back to this class
-                startGameAsyncTask.comparable = GameFragment.this;
-                startGameAsyncTask.execute(button4Teams.getText().toString());
-            }
-        });*/
 
         return rootView;
     }
 
     @Override
     public void processFinish(String result) {
-        textView2Teams.setText(result);
         Intent intent = new Intent(context, GameRoundActivity.class);
         intent.putExtra(GAME_ID, result);
         startActivity(intent);
@@ -95,7 +61,7 @@ public class GameFragment extends Fragment implements AsyncResponse<String> {
     public void onClick(View view) {
         StartGameAsyncTask startGameAsyncTask = new StartGameAsyncTask(context);
         //this to set comparable/listener back to this class
-        startGameAsyncTask.delegate = GameFragment.this;
+        startGameAsyncTask.delegate = this;
 
         switch (view.getId()) {
 

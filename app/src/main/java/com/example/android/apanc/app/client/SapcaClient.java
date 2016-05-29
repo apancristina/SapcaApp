@@ -5,13 +5,17 @@ import android.content.Context;
 import android.os.Build;
 import android.util.JsonReader;
 
-import com.example.android.apanc.app.Model.Round;
 import com.example.android.apanc.app.R;
+import com.example.android.apanc.app.model.Game;
+import com.example.android.apanc.app.model.Round;
+import com.example.android.apanc.app.model.Team;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.HttpUrl;
@@ -38,8 +42,8 @@ public class SapcaClient {
         return executeCall(buildStartGameRequest(nrOfTeams));
     }
 
-    public String getGame(String gameId) throws IOException {
-        return executeCall(buildGameDetailsRequest(gameId));
+    public Game getGame(String gameId) throws IOException {
+        return getGameDetails(buildGameDetailsRequest(gameId));
     }
 
     public Round nextRound(String gameId) throws IOException {
@@ -106,6 +110,61 @@ public class SapcaClient {
         return null;
     }
 
+    private Game getGameDetails(Request request) throws IOException {
+        Response response;
+        Call call = null;
+        try {
+            call = client.newCall(request);
+            response = call.execute();
+            if (response.isSuccessful()) {
+                return readGame(response.body().byteStream());
+            } else {
+                response.body().close();
+            }
+        } catch (IOException e) {
+            //Log.e(TAG, "doInBack", e); // show to user
+            throw e;
+        } finally {
+            if (call != null) {
+            }
+        }
+        return null;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private Game readGame(InputStream inputStream) throws IOException {
+        Game game = new Game();
+        JsonReader reader = new JsonReader(new InputStreamReader(inputStream, "UTF-8"));
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            switch (name) {
+                case "id":
+                    game.setId(reader.nextString());
+                    break;
+                case "teams":
+                    game.setTeams(readTeams(reader));
+                    break;
+                default:
+                    break;
+            }
+        }
+        reader.endObject();
+        reader.close();
+        return game;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private List<Team> readTeams(JsonReader reader) throws IOException {
+        List<Team> teams = new ArrayList<>();
+        reader.beginArray();
+        while (reader.hasNext()) {
+            teams.add(readTeam(reader));
+        }
+        reader.endArray();
+        return teams;
+    }
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private Round readRound(InputStream inputStream) throws IOException {
         Round round = new Round();
@@ -118,13 +177,13 @@ public class SapcaClient {
                     round.setText(reader.nextString());
                     break;
                 case "points":
-                    round.setRoundPoints(reader.nextString());
+                    round.setPoints(reader.nextString());
                     break;
                 case "options":
                     round.setOptions(reader.nextString());
                     break;
                 case "team":
-                    round = readTeam(reader, round);
+                    round.setTeam(readTeam(reader));
                     break;
                 default:
                     reader.skipValue();
@@ -137,16 +196,20 @@ public class SapcaClient {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private Round readTeam(JsonReader reader, Round round) throws IOException {
+    private Team readTeam(JsonReader reader) throws IOException {
+        Team team = new Team();
         reader.beginObject();
         while (reader.hasNext()) {
             String name = reader.nextName();
             switch (name) {
                 case "id":
-                    round.setTeamId(reader.nextString());
+                    team.setId(reader.nextString());
                     break;
                 case "color":
-                    round.setTeamColour(reader.nextString());
+                    team.setColor(reader.nextString());
+                    break;
+                case "points":
+                    team.setPoints(reader.nextString());
                     break;
                 default:
                     reader.skipValue();
@@ -154,7 +217,7 @@ public class SapcaClient {
             }
         }
         reader.endObject();
-        return round;
+        return team;
     }
 
     private String readResponse(InputStream inputStream) throws IOException {
