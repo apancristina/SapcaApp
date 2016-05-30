@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -34,7 +35,6 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
 
     private static final String ZERO_POINTS = "0";
     private Context context;
-    private TextView roundDetailsTextView;
     private Round currentRound;
     private Button correct;
     private Button wrong;
@@ -42,6 +42,14 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     private LinearLayout progressBarLinearLayout;
     private Map<String, ProgressBar> progressBars = new HashMap<>(4);
     private boolean unlocked = true;
+
+    private TextView currentTeamTextView;
+    private TextView roundQuestionTextView;
+    private TextView roundPointsTextView;
+    private ImageView mime;
+    private ImageView talk;
+    private ImageView draw;
+    private TextView timer;
 
     public GameRoundActivityFragment() {
     }
@@ -52,15 +60,25 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         context = getActivity().getApplicationContext();
         View rootView = inflater.inflate(R.layout.fragment_game_round, container, false);
 
-        correct = (Button) rootView.findViewById(R.id.CORRECT_BUTTON);
+        correct = (Button) rootView.findViewById(R.id.correctButton);
         correct.setOnClickListener(this);
-        wrong = (Button) rootView.findViewById(R.id.WRONG_BUTTON);
+        wrong = (Button) rootView.findViewById(R.id.wrongButton);
         wrong.setOnClickListener(this);
 
         Intent intent = getActivity().getIntent();
         gameId = intent.getStringExtra(GameFragment.GAME_ID);
 
-        roundDetailsTextView = (TextView) rootView.findViewById(R.id.ROUND_DETAILS);
+        currentTeamTextView = (TextView) rootView.findViewById(R.id.currentTeam);
+        roundQuestionTextView = (TextView) rootView.findViewById(R.id.roundQuestion);
+        roundPointsTextView = (TextView) rootView.findViewById(R.id.points);
+
+        mime = (ImageView) rootView.findViewById(R.id.mime);
+        talk = (ImageView) rootView.findViewById(R.id.talk);
+        draw = (ImageView) rootView.findViewById(R.id.draw);
+
+        timer = (TextView) rootView.findViewById(R.id.timer);
+        timer.setText("timer is here");
+
         progressBarLinearLayout = (LinearLayout) rootView.findViewById(R.id.progressLinearLayout);
 
         getGameDetails();
@@ -84,12 +102,12 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
             if (currentRound != null) {
                 switch (view.getId()) {
 
-                    case R.id.CORRECT_BUTTON:
+                    case R.id.correctButton:
                         // TODO: 29-May-16 Move integer.valueof in model classes
                         progressBars.get(currentRound.getTeam().getId()).incrementProgressBy(Integer.valueOf(currentRound.getPoints()));
                         addPointsAsyncTask.execute(currentRound.getTeam().getId(), currentRound.getPoints());
                         break;
-                    case R.id.WRONG_BUTTON:
+                    case R.id.wrongButton:
                         addPointsAsyncTask.execute(currentRound.getTeam().getId(), ZERO_POINTS);
                         break;
                     default:
@@ -103,12 +121,32 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     @Override
     public void processFinish(Round round) {
         if (round != null) {
+            mime.setVisibility(View.INVISIBLE);
+            talk.setVisibility(View.INVISIBLE);
+            draw.setVisibility(View.INVISIBLE);
+
             currentRound = round;
-            String displayMessage = round.getText() + "\n" + round.getOptions() + "\n" + round.getPoints();
-            roundDetailsTextView.setText(displayMessage);
-            setBackgroundColor(round);
+            String displayMessage = round.getTeam().getColor() + "'s turn";
+            currentTeamTextView.setText(displayMessage);
+            roundQuestionTextView.setText(round.getText());
+            roundPointsTextView.setText(round.getPoints());
+            String options = round.getOptions();
+            switch (options) {
+                case "mima":
+                    mime.setVisibility(View.VISIBLE);
+                    break;
+                case "deseneaza, mimeaza, vorbeste": {
+                    talk.setVisibility(View.VISIBLE);
+                }
+                case "anything":
+                    mime.setVisibility(View.VISIBLE);
+                    talk.setVisibility(View.VISIBLE);
+                    draw.setVisibility(View.VISIBLE);
+            }
+
+            //setBackgroundColor(round);
         } else {
-            roundDetailsTextView.setText("ROUND IS NULL");
+            currentTeamTextView.setText("No Current Team -> nextRound failed");
         }
         unlocked = true;
 
@@ -118,11 +156,11 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         switch (round.getTeam().getColor()) {
             case "blue":
                 int blue = Color.rgb(106, 186, 252);
-                roundDetailsTextView.setBackgroundColor(blue);
+                currentTeamTextView.setBackgroundColor(blue);
                 break;
             case "green":
                 int green = Color.rgb(95, 223, 75);
-                roundDetailsTextView.setBackgroundColor(green);
+                currentTeamTextView.setBackgroundColor(green);
                 break;
             default:
                 break;
@@ -144,7 +182,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     }
 
     public void finishProcessGameDetails(Game game){
-        roundDetailsTextView.append(game.getId());
+        currentTeamTextView.append(game.getId());
         if (progressBars.isEmpty()) {
             RelativeLayout.LayoutParams progressBarParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             for (Team team : game.getTeams()) {

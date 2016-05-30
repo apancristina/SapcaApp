@@ -10,6 +10,8 @@ import com.example.android.apanc.app.model.Game;
 import com.example.android.apanc.app.model.Round;
 import com.example.android.apanc.app.model.Team;
 
+import org.apache.http.client.HttpResponseException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,18 +53,20 @@ public class SapcaClient {
     }
 
     public String addPoints(String teamId, String points) throws IOException {
-        Response response;
-        Call call = null;
+        Response response = null;
         try {
-            call = client.newCall(buildAddPointsRequest(teamId, points));
-            response = call.execute();
-            return readResponse(response.body().byteStream());
+            response = client.newCall(buildAddPointsRequest(teamId, points)).execute();
+            if (response.isSuccessful()) {
+                return readResponse(response.body().byteStream());
+            } else {
+                throw new HttpResponseException(response.code(), "Failed to retrieve game details :(");
+            }
         } catch (IOException e) {
             //Log.e(TAG, "doInBack", e); // show to user
             throw e;
         } finally {
-            if (call != null) {
-                //call.
+            if (response != null) {
+                response.body().close();
             }
         }
     }
@@ -73,62 +77,59 @@ public class SapcaClient {
 
     //TODO handle failure more pleasantly
     private String executeCall(Request request) throws IOException {
-        Response response;
-        Call call = null;
+        Response response = null;
         try {
-            call = client.newCall(request);
-            response = call.execute();
-            return readResponse(response.body().byteStream());
+            response = client.newCall(request).execute();
+            if (response.isSuccessful()) {
+                return readResponse(response.body().byteStream());
+            } else {
+                throw new HttpResponseException(response.code(), "Failed to retrieve game details :(");
+            }
         } catch (IOException e) {
-            //Log.e(TAG, "doInBack", e); // show to user
             throw e;
         } finally {
-            if (call != null) {
-                //call.
+            if (response != null) {
+                response.body().close();
             }
         }
     }
 
     private Round getRound(Request request) throws IOException {
-        Response response;
-        Call call = null;
+        Response response = null;
         try {
-            call = client.newCall(request);
-            response = call.execute();
+            response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 return readRound(response.body().byteStream());
             } else {
-                response.body().close();
+                throw new HttpResponseException(response.code(), "Failed to retrieve game details :(");
             }
         } catch (IOException e) {
             //Log.e(TAG, "doInBack", e); // show to user
             throw e;
         } finally {
-            if (call != null) {
+            if (response != null) {
+                response.body().close();
             }
         }
-        return null;
     }
 
     private Game getGameDetails(Request request) throws IOException {
-        Response response;
-        Call call = null;
+        Response response = null;
         try {
-            call = client.newCall(request);
-            response = call.execute();
+            response = client.newCall(request).execute();
             if (response.isSuccessful()) {
                 return readGame(response.body().byteStream());
             } else {
-                response.body().close();
+                throw new HttpResponseException(response.code(), "Failed to retrieve game details :(");
             }
         } catch (IOException e) {
             //Log.e(TAG, "doInBack", e); // show to user
             throw e;
         } finally {
-            if (call != null) {
+            if (response != null) {
+                response.body().close();
             }
         }
-        return null;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

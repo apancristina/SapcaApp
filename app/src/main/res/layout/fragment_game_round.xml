@@ -10,46 +10,34 @@
     tools:context="com.example.android.apanc.app.GameRoundActivityFragment">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="game id here"
-        android:id="@+id/testViewGameId"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/ROUND_DETAILS"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_above="@+id/CORRECT_BUTTON"
-        android:layout_below="@+id/progressLinearLayout" />
-
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="correct"
-        android:id="@+id/CORRECT_BUTTON"
-        android:layout_above="@+id/testViewGameId"
+        android:id="@+id/correctButton"
+        android:layout_alignTop="@+id/wrongButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/testViewGameId"
-        android:layout_toStartOf="@+id/testViewGameId" />
+        android:layout_alignParentStart="true" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="wrong"
-        android:id="@+id/WRONG_BUTTON"
-        android:layout_alignTop="@+id/CORRECT_BUTTON"
-        android:layout_alignRight="@+id/ROUND_DETAILS"
-        android:layout_alignEnd="@+id/ROUND_DETAILS"
-        android:layout_toEndOf="@+id/testViewGameId" />
+        android:id="@+id/wrongButton"
+        android:layout_marginBottom="102dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/progressLinearLayout" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressLinearLayout"
+        android:layout_above="@+id/correctButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -57,8 +45,89 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/progressLinearLayout">
+        android:id="@+id/roundLinearLayout">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/currentTeam"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/roundQuestion"
+        android:layout_below="@+id/roundLinearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/points"
+        android:layout_below="@+id/roundQuestion"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:width="50dp"
+        android:height="50dp"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/draw"
+        android:layout_alignTop="@+id/points"
+        android:layout_alignRight="@+id/roundQuestion"
+        android:layout_alignEnd="@+id/roundQuestion"
+        android:minHeight="50dp"
+        android:minWidth="50dp"
+        android:visibility="invisible"
+        android:src="#f196c7" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/talk"
+        android:minHeight="50dp"
+        android:maxWidth="50dp"
+        android:minWidth="50dp"
+        android:layout_below="@+id/roundQuestion"
+        android:layout_toLeftOf="@+id/draw"
+        android:layout_toStartOf="@+id/draw"
+        android:visibility="invisible"
+        android:src="#5f9d57" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mime"
+        android:layout_below="@+id/roundQuestion"
+        android:layout_toLeftOf="@+id/talk"
+        android:layout_toStartOf="@+id/talk"
+        android:minWidth="50dp"
+        android:minHeight="50dp"
+        android:visibility="invisible"
+        android:src="#9e6b9a" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/points"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/timerLinearLayout">
+
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50sp"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
 </RelativeLayout>
