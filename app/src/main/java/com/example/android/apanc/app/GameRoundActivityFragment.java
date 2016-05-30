@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,6 +43,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     private LinearLayout progressBarLinearLayout;
     private Map<String, ProgressBar> progressBars = new HashMap<>(4);
     private boolean unlocked = true;
+    private boolean timerHasStarted = false;
 
     private TextView currentTeamTextView;
     private TextView roundQuestionTextView;
@@ -49,7 +51,11 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     private ImageView mime;
     private ImageView talk;
     private ImageView draw;
-    private TextView timer;
+    private TextView timerTextView;
+    private final long startTime = 60 * 1000;
+    private final long interval = 1000;
+    private Button timerButton;
+    private CountDownTimer countDownTimer;
 
     public GameRoundActivityFragment() {
     }
@@ -76,8 +82,29 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         talk = (ImageView) rootView.findViewById(R.id.talk);
         draw = (ImageView) rootView.findViewById(R.id.draw);
 
-        timer = (TextView) rootView.findViewById(R.id.timer);
-        timer.setText("timer is here");
+        timerButton = (Button) rootView.findViewById(R.id.timerButton);
+        timerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickTimer(view);
+            }
+        });
+        timerTextView = (TextView) rootView.findViewById(R.id.timer);
+
+        countDownTimer = new CountDownTimer(startTime, interval) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                String text = "" + millisUntilFinished / 1000;
+                timerTextView.setText(text);
+            }
+
+            @Override
+            public void onFinish() {
+                timerTextView.setText("Time's up!");
+            }
+        };
+        timerTextView.setText(String.valueOf(startTime / 1000));
 
         progressBarLinearLayout = (LinearLayout) rootView.findViewById(R.id.progressLinearLayout);
 
@@ -115,7 +142,19 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
                 }
             }
         }
-        //put actions on click here
+    }
+
+    public void onClickTimer(View view) {
+        if (!timerHasStarted) {
+            countDownTimer.start();
+            timerHasStarted = true;
+            timerButton.setText("STOP");
+        } else {
+            countDownTimer.cancel();
+            timerTextView.setText(String.valueOf(startTime / 1000));
+            timerHasStarted = false;
+            timerButton.setText("RESTART");
+        }
     }
 
     @Override
