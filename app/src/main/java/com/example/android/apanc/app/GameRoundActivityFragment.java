@@ -3,6 +3,7 @@ package com.example.android.apanc.app;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -10,9 +11,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,6 +59,8 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     private final long interval = 1000;
     private Button timerButton;
     private CountDownTimer countDownTimer;
+    private LinearLayout timerLayout;
+    private PopupWindow popupWindow;
 
     public GameRoundActivityFragment() {
     }
@@ -64,7 +69,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
-        View rootView = inflater.inflate(R.layout.fragment_game_round, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_game_round, container, true);
 
         correct = (Button) rootView.findViewById(R.id.correctButton);
         correct.setOnClickListener(this);
@@ -81,6 +86,18 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         mime = (ImageView) rootView.findViewById(R.id.mime);
         talk = (ImageView) rootView.findViewById(R.id.talk);
         draw = (ImageView) rootView.findViewById(R.id.draw);
+
+        timerLayout = (LinearLayout) rootView.findViewById(R.id.timerLinearLayout);
+        /*popupWindow = new PopupWindow(timerLayout, LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.rgb(135,129,128)));
+
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) rootView.getLayoutParams();
+        p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        p.dimAmount = 0.3f;
+        wm.updateViewLayout(rootView, p);*/
+
+        //popupWindow.showAsDropDown(anchor);
 
         timerButton = (Button) rootView.findViewById(R.id.timerButton);
         timerButton.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +162,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     }
 
     public void onClickTimer(View view) {
+        //popupWindow.showAsDropDown(view);
         if (!timerHasStarted) {
             countDownTimer.start();
             timerHasStarted = true;
