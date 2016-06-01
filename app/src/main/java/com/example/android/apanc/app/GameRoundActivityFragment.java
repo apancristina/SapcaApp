@@ -4,8 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -61,6 +66,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     private CountDownTimer countDownTimer;
     private LinearLayout timerLayout;
     private PopupWindow popupWindow;
+    private Ringtone timerRingtone;
 
     public GameRoundActivityFragment() {
     }
@@ -88,16 +94,6 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         draw = (ImageView) rootView.findViewById(R.id.draw);
 
         timerLayout = (LinearLayout) rootView.findViewById(R.id.timerLinearLayout);
-        /*popupWindow = new PopupWindow(timerLayout, LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.rgb(135,129,128)));
-
-        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-        WindowManager.LayoutParams p = (WindowManager.LayoutParams) rootView.getLayoutParams();
-        p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        p.dimAmount = 0.3f;
-        wm.updateViewLayout(rootView, p);*/
-
-        //popupWindow.showAsDropDown(anchor);
 
         timerButton = (Button) rootView.findViewById(R.id.timerButton);
         timerButton.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +103,10 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
             }
         });
         timerTextView = (TextView) rootView.findViewById(R.id.timer);
+
+        Uri timerSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        timerRingtone = RingtoneManager.getRingtone(context, timerSound);
+
 
         countDownTimer = new CountDownTimer(startTime, interval) {
 
@@ -119,7 +119,20 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
             @Override
             public void onFinish() {
                 timerTextView.setText("Time's up!");
+                timerButton.setClickable(false);
+                timerRingtone.play();
+                unlocked = true;
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (timerRingtone.isPlaying())
+                            timerRingtone.stop();
+                    }
+                }, 6000);
             }
+
         };
         timerTextView.setText(String.valueOf(startTime / 1000));
 
@@ -129,12 +142,6 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         getNextRound();
 
         return rootView;
-    }
-
-    private void getGameDetails() {
-        GameDetailsAsyncTask gameDetailsAsyncTask = new GameDetailsAsyncTask(context);
-        gameDetailsAsyncTask.fragment = this;
-        gameDetailsAsyncTask.execute(gameId);
     }
 
     @Override
@@ -162,7 +169,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     }
 
     public void onClickTimer(View view) {
-        //popupWindow.showAsDropDown(view);
+        unlocked = false;
         if (!timerHasStarted) {
             countDownTimer.start();
             timerHasStarted = true;
@@ -178,6 +185,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     @Override
     public void processFinish(Round round) {
         if (round != null) {
+            timerButton.setClickable(true);
             mime.setVisibility(View.INVISIBLE);
             talk.setVisibility(View.INVISIBLE);
             draw.setVisibility(View.INVISIBLE);
@@ -200,13 +208,17 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
                     talk.setVisibility(View.VISIBLE);
                     draw.setVisibility(View.VISIBLE);
             }
-
-            //setBackgroundColor(round);
         } else {
-            currentTeamTextView.setText("No Current Team -> nextRound failed");
+            currentTeamTextView.setText("Failed to retrieve next round information.");
         }
         unlocked = true;
 
+    }
+
+    private void getGameDetails() {
+        GameDetailsAsyncTask gameDetailsAsyncTask = new GameDetailsAsyncTask(context);
+        gameDetailsAsyncTask.fragment = this;
+        gameDetailsAsyncTask.execute(gameId);
     }
 
     private void setBackgroundColor(Round round) {
