@@ -1,4 +1,4 @@
-package com.example.android.apanc.app.model;
+package com.android.apanc.app.model;
 
 import java.util.List;
 

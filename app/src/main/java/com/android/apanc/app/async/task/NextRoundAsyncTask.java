@@ -1,8 +1,8 @@
-package com.example.android.apanc.app.async.task;
+package com.android.apanc.app.async.task;
 
 import android.content.Context;
 
-import com.example.android.apanc.app.model.Round;
+import com.android.apanc.app.model.Round;
 
 import java.io.IOException;
 

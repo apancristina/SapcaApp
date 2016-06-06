@@ -1,14 +1,14 @@
-package com.example.android.apanc.app.client;
+package com.android.apanc.app.client;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.util.JsonReader;
 
+import com.android.apanc.app.model.Round;
+import com.android.apanc.app.model.Team;
 import com.example.android.apanc.app.R;
-import com.example.android.apanc.app.model.Game;
-import com.example.android.apanc.app.model.Round;
-import com.example.android.apanc.app.model.Team;
+import com.android.apanc.app.model.Game;
 
 import org.apache.http.client.HttpResponseException;
 
@@ -19,7 +19,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

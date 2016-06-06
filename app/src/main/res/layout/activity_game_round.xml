@@ -1,7 +1,7 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/game_round_fragment"
-    android:name="com.example.android.apanc.app.GameRoundActivityFragment"
+    android:name="com.android.apanc.app.GameRoundActivityFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:layout="@layout/fragment_game_round" />

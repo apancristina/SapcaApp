@@ -1,4 +1,4 @@
-package com.example.android.apanc.app;
+package com.android.apanc.app;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.example.android.apanc.app.async.response.AsyncResponse;
-import com.example.android.apanc.app.async.task.StartGameAsyncTask;
+import com.android.apanc.app.async.task.StartGameAsyncTask;
+import com.example.android.apanc.app.R;
+import com.android.apanc.app.async.response.AsyncResponse;
 
 /**
  * Created by apanc on 21-May-16.

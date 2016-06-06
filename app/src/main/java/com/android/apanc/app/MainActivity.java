@@ -1,9 +1,10 @@
-package com.example.android.apanc.app;
+package com.android.apanc.app;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.example.android.apanc.app.R;
 
 
 public class MainActivity extends ActionBarActivity {

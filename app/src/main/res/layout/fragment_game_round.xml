@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:id="@+id/round_relative_layout"
-    tools:context="com.example.android.apanc.app.GameRoundActivityFragment">
+    tools:context="com.android.apanc.app.GameRoundActivityFragment">
 
 
     <Button

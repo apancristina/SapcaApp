@@ -1,4 +1,4 @@
-package com.example.android.apanc.app.model;
+package com.android.apanc.app.model;
 
 /**
  * Created by apanc on 25-May-16.

@@ -1,4 +1,4 @@
-package com.example.android.apanc.app.async.response;
+package com.android.apanc.app.async.response;
 
 import android.view.View;
 

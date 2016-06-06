@@ -1,10 +1,10 @@
-package com.example.android.apanc.app.async.task;
+package com.android.apanc.app.async.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.example.android.apanc.app.async.response.AsyncResponse;
-import com.example.android.apanc.app.client.SapcaClient;
+import com.android.apanc.app.async.response.AsyncResponse;
+import com.android.apanc.app.client.SapcaClient;
 
 /**
  * Created by apanc on 22-May-16.

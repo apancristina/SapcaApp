@@ -1,9 +1,9 @@
-package com.example.android.apanc.app.async.task;
+package com.android.apanc.app.async.task;
 
 import android.content.Context;
 
-import com.example.android.apanc.app.GameRoundActivityFragment;
-import com.example.android.apanc.app.model.Game;
+import com.android.apanc.app.GameRoundActivityFragment;
+import com.android.apanc.app.model.Game;
 
 import java.io.IOException;
 

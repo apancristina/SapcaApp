@@ -1,10 +1,8 @@
-package com.example.android.apanc.app;
+package com.android.apanc.app;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -16,23 +14,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.android.apanc.app.async.response.AsyncResponse;
-import com.example.android.apanc.app.async.task.AddPointsAsyncTask;
-import com.example.android.apanc.app.async.task.GameDetailsAsyncTask;
-import com.example.android.apanc.app.async.task.NextRoundAsyncTask;
-import com.example.android.apanc.app.model.Game;
-import com.example.android.apanc.app.model.Round;
-import com.example.android.apanc.app.model.Team;
+import android.widget.*;
+import com.android.apanc.app.async.response.AsyncResponse;
+import com.android.apanc.app.async.task.AddPointsAsyncTask;
+import com.android.apanc.app.async.task.GameDetailsAsyncTask;
+import com.android.apanc.app.async.task.NextRoundAsyncTask;
+import com.android.apanc.app.model.Game;
+import com.android.apanc.app.model.Round;
+import com.android.apanc.app.model.Team;
+import com.example.android.apanc.app.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -251,7 +241,6 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     }
 
     public void finishProcessGameDetails(Game game){
-        currentTeamTextView.append(game.getId());
         if (progressBars.isEmpty()) {
             RelativeLayout.LayoutParams progressBarParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             for (Team team : game.getTeams()) {

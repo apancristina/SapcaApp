@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.android.apanc.app.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,12 +19,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GameRoundActivity"
+            android:name="com.android.apanc.app.GameRoundActivity"
             android:label="@string/title_activity_game_round"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.android.apanc.app.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.apanc.app.MainActivity" />
+                android:value="com.android.apanc.app.MainActivity" />
         </activity>
     </application>
 
