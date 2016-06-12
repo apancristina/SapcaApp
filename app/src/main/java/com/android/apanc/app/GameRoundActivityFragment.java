@@ -252,7 +252,8 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     }
 
     private void styleCurrentTeam(String color) {
-        currentTeamTextView.setText(color);
+        String teamText = color + " TEAM";
+        currentTeamTextView.setText(teamText);
         switch (color) {
             case "RED":
                 currentTeamTextView.setTextColor(Color.rgb(204, 23, 23));
