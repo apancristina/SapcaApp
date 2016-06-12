@@ -152,6 +152,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/draw"
             android:src="@drawable/ic_options_pen"
+            android:background="@drawable/custom_border"
             android:minHeight="75dp"
             android:minWidth="75dp"
             android:layout_alignParentTop="true"
@@ -163,6 +164,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/talk"
             android:src="@drawable/ic_options_talk"
+            android:background="@drawable/custom_border"
             android:minWidth="75dp"
             android:minHeight="75dp"
             android:layout_alignParentTop="true"
@@ -174,6 +176,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/mime"
             android:src="@drawable/ic_options_mime"
+            android:background="@drawable/custom_border"
             android:minHeight="75dp"
             android:minWidth="75dp"
             android:layout_alignParentTop="true"
@@ -194,8 +197,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:background="@drawable/custom_border"
             android:width="75dp"
-            android:height="75dp"
-            android:text="3" />
+            android:height="75dp" />
 
     </RelativeLayout>
 

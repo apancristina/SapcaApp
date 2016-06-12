@@ -33,13 +33,17 @@ import java.util.Map;
 public class GameRoundActivityFragment extends Fragment implements AsyncResponse<Round> {
 
     private static final String ZERO_POINTS = "0";
+    public static final int RED = Color.rgb(204, 23, 23);
+    public static final int BLUE = Color.rgb(29, 29, 255);
+    public static final int GREEN = Color.rgb(65, 162, 80);
+    public static final int YELLOW = Color.rgb(208, 218, 20);
     private Context context;
     private Round currentRound;
     private Button correct;
     private Button wrong;
     private String gameId;
-    private LinearLayout progressBarLinearLayout;
-    private Map<String, ProgressBar> progressBars = new HashMap<>(4);
+    /*private LinearLayout progressBarLinearLayout;
+    private Map<String, ProgressBar> progressBars = new HashMap<>(4);*/
     private boolean unlocked = true;
     private boolean timerHasStarted = false;
 
@@ -256,16 +260,16 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         currentTeamTextView.setText(teamText);
         switch (color) {
             case "RED":
-                currentTeamTextView.setTextColor(Color.rgb(204, 23, 23));
+                currentTeamTextView.setTextColor(RED);
                 break;
             case "BLUE":
-                currentTeamTextView.setTextColor(Color.rgb(29, 29, 255));
+                currentTeamTextView.setTextColor(BLUE);
                 break;
             case "GREEN":
-                currentTeamTextView.setTextColor(Color.rgb(65, 162, 80));
+                currentTeamTextView.setTextColor(GREEN);
                 break;
             case "YELLOW":
-                currentTeamTextView.setTextColor(Color.rgb(208, 218, 20));
+                currentTeamTextView.setTextColor(YELLOW);
                 break;
             default:
                 break;
@@ -277,12 +281,42 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
             getNextRound();
         } else {
             //Toast.makeText(getActivity(), "Team " + currentRound.getTeamId() + " won!", Toast.LENGTH_SHORT).show();
-            String text = currentRound.getTeam().getColor().toUpperCase() + " team has won!";
-            Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.FILL_HORIZONTAL, Gravity.FILL_VERTICAL, 0);
+            TextView winner = new TextView(context);
+            winner.setGravity(Gravity.CENTER);
+            winner.setTextAppearance(context, R.style.CustomWinStyle);
+            // TODO: 12-Jun-16 use lowercase color comparison
+            String winningColor = currentRound.getTeam().getColor().toUpperCase();
+            switch (winningColor) {
+                case "RED":
+                    winner.setTextColor(RED);
+                    break;
+                case "BLUE":
+                    winner.setTextColor(BLUE);
+                    break;
+                case "GREEN":
+                    winner.setTextColor(GREEN);
+                    break;
+                case "YELLOW":
+                    winner.setTextColor(YELLOW);
+                    break;
+                default:
+                    break;
+            }
+
+            winner.setBackgroundResource(R.color.background_material_dark);
+
+
+            String winningText = winningColor + " Team won!";
+            winner.setText(winningText);
+            //Toast toast = Toast.makeText(context, winningText, Toast.LENGTH_LONG);
+            Toast toast = new Toast(context);
+            toast.setGravity(Gravity.FILL_HORIZONTAL|Gravity.FILL_VERTICAL, 0, 0);
             toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(winner);
+
             toast.show();
             // TODO: 29-May-16 new intent --> got to main activity
+
         }
     }
 
