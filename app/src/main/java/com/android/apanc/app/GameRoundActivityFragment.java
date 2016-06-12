@@ -51,12 +51,13 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     private ImageView draw;
     private TextView timerTextView;
     private final long startTime = 60 * 1000;
-    private final long interval = 1000;
     private Button timerButton;
     private CountDownTimer countDownTimer;
-    private LinearLayout timerLayout;
-    private PopupWindow popupWindow;
     private Ringtone timerRingtone;
+    private ProgressBar pbRed;
+    private ProgressBar pbBlue;
+    private ProgressBar pbGreen;
+    private ProgressBar pbYellow;
 
     public GameRoundActivityFragment() {
     }
@@ -67,13 +68,23 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         context = getActivity().getApplicationContext();
         View rootView = inflater.inflate(R.layout.fragment_game_round, container, true);
 
+        Intent intent = getActivity().getIntent();
+        gameId = intent.getStringExtra(GameFragment.GAME_ID);
+
         correct = (Button) rootView.findViewById(R.id.correctButton);
         correct.setOnClickListener(this);
         wrong = (Button) rootView.findViewById(R.id.wrongButton);
         wrong.setOnClickListener(this);
 
-        Intent intent = getActivity().getIntent();
-        gameId = intent.getStringExtra(GameFragment.GAME_ID);
+        pbRed = (ProgressBar) rootView.findViewById(R.id.progressBarRed);
+        pbRed.setVisibility(View.INVISIBLE);
+        pbBlue = (ProgressBar) rootView.findViewById(R.id.progressBarBlue);
+        pbBlue.setVisibility(View.INVISIBLE);
+        pbGreen = (ProgressBar) rootView.findViewById(R.id.progressBarGreen);
+        pbGreen.setVisibility(View.INVISIBLE);
+        pbYellow = (ProgressBar) rootView.findViewById(R.id.progressBarYellow);
+        pbYellow.setVisibility(View.INVISIBLE);
+
 
         currentTeamTextView = (TextView) rootView.findViewById(R.id.currentTeam);
         roundQuestionTextView = (TextView) rootView.findViewById(R.id.roundQuestion);
@@ -82,8 +93,9 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         mime = (ImageView) rootView.findViewById(R.id.mime);
         talk = (ImageView) rootView.findViewById(R.id.talk);
         draw = (ImageView) rootView.findViewById(R.id.draw);
-
-        timerLayout = (LinearLayout) rootView.findViewById(R.id.timerLinearLayout);
+        mime.setVisibility(View.INVISIBLE);
+        talk.setVisibility(View.INVISIBLE);
+        draw.setVisibility(View.INVISIBLE);
 
         timerButton = (Button) rootView.findViewById(R.id.timerButton);
         timerButton.setOnClickListener(new View.OnClickListener() {
@@ -97,8 +109,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         Uri timerSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         timerRingtone = RingtoneManager.getRingtone(context, timerSound);
 
-
-        countDownTimer = new CountDownTimer(startTime, interval) {
+        countDownTimer = new CountDownTimer(startTime, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -126,7 +137,8 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         };
         timerTextView.setText(String.valueOf(startTime / 1000));
 
-        progressBarLinearLayout = (LinearLayout) rootView.findViewById(R.id.progressLinearLayout);
+        //progressBarLinearLayout = (LinearLayout) rootView.findViewById(R.id.progressLinearLayout);
+
 
         getGameDetails();
         getNextRound();
@@ -142,14 +154,33 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
             addPointsAsyncTask.fragment = this;
             if (currentRound != null) {
                 switch (view.getId()) {
-
                     case R.id.correctButton:
                         // TODO: 29-May-16 Move integer.valueof in model classes
-                        progressBars.get(currentRound.getTeam().getId()).incrementProgressBy(Integer.valueOf(currentRound.getPoints()));
+//                        progressBars.get(currentRound.getTeam().getId()).incrementProgressBy(Integer.valueOf(currentRound.getPoints()));
+                        String teamColor = currentRound.getTeam().getColor().toUpperCase();
+                        switch (teamColor) {
+                            case "RED":
+                                pbRed.incrementProgressBy(Integer.valueOf(currentRound.getPoints()));
+                                break;
+                            case "BLUE":
+                                pbBlue.incrementProgressBy(Integer.valueOf(currentRound.getPoints()));
+                                break;
+                            case "GREEN":
+                                pbGreen.incrementProgressBy(Integer.valueOf(currentRound.getPoints()));
+                                break;
+                            case "YELLOW":
+                                pbYellow.incrementProgressBy(Integer.valueOf(currentRound.getPoints()));
+                                break;
+                            default:
+                                break;
+
+                        }
                         addPointsAsyncTask.execute(currentRound.getTeam().getId(), currentRound.getPoints());
+                        timerButton.setText("START");
                         break;
                     case R.id.wrongButton:
                         addPointsAsyncTask.execute(currentRound.getTeam().getId(), ZERO_POINTS);
+                        timerButton.setText("START");
                         break;
                     default:
                         break;
@@ -169,6 +200,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
             timerTextView.setText(String.valueOf(startTime / 1000));
             timerHasStarted = false;
             timerButton.setText("RESTART");
+            unlocked = true;
         }
     }
 
@@ -181,22 +213,30 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
             draw.setVisibility(View.INVISIBLE);
 
             currentRound = round;
-            String displayMessage = round.getTeam().getColor() + "'s turn";
-            currentTeamTextView.setText(displayMessage);
+            String currentTeamColor = round.getTeam().getColor().toUpperCase();
+            styleCurrentTeam(currentTeamColor);
             roundQuestionTextView.setText(round.getText());
             roundPointsTextView.setText(round.getPoints());
+
             String options = round.getOptions();
             switch (options) {
-                case "mima":
+                case "MIMA":
                     mime.setVisibility(View.VISIBLE);
                     break;
-                case "deseneaza, mimeaza, vorbeste": {
+                case "VORBESTE": {
                     talk.setVisibility(View.VISIBLE);
+                    break;
                 }
-                case "anything":
+                case "DESENEAZA": {
+                    draw.setVisibility(View.VISIBLE);
+                    break;
+
+                }
+                case "TOTUL_ESTE_POSIBIL":
                     mime.setVisibility(View.VISIBLE);
                     talk.setVisibility(View.VISIBLE);
                     draw.setVisibility(View.VISIBLE);
+                    break;
             }
         } else {
             currentTeamTextView.setText("Failed to retrieve next round information.");
@@ -211,15 +251,20 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
         gameDetailsAsyncTask.execute(gameId);
     }
 
-    private void setBackgroundColor(Round round) {
-        switch (round.getTeam().getColor()) {
-            case "blue":
-                int blue = Color.rgb(106, 186, 252);
-                currentTeamTextView.setBackgroundColor(blue);
+    private void styleCurrentTeam(String color) {
+        currentTeamTextView.setText(color);
+        switch (color) {
+            case "RED":
+                currentTeamTextView.setTextColor(Color.rgb(204, 23, 23));
                 break;
-            case "green":
-                int green = Color.rgb(95, 223, 75);
-                currentTeamTextView.setBackgroundColor(green);
+            case "BLUE":
+                currentTeamTextView.setTextColor(Color.rgb(29, 29, 255));
+                break;
+            case "GREEN":
+                currentTeamTextView.setTextColor(Color.rgb(65, 162, 80));
+                break;
+            case "YELLOW":
+                currentTeamTextView.setTextColor(Color.rgb(208, 218, 20));
                 break;
             default:
                 break;
@@ -231,7 +276,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
             getNextRound();
         } else {
             //Toast.makeText(getActivity(), "Team " + currentRound.getTeamId() + " won!", Toast.LENGTH_SHORT).show();
-            String text = "Team " + currentRound.getTeam().getId() + " won!";
+            String text = currentRound.getTeam().getColor().toUpperCase() + " team has won!";
             Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
             toast.setGravity(Gravity.FILL_HORIZONTAL, Gravity.FILL_VERTICAL, 0);
             toast.setDuration(Toast.LENGTH_LONG);
@@ -241,7 +286,7 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
     }
 
     public void finishProcessGameDetails(Game game){
-        if (progressBars.isEmpty()) {
+        /*if (progressBars.isEmpty()) {
             RelativeLayout.LayoutParams progressBarParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             for (Team team : game.getTeams()) {
                 ProgressBar progressBar = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
@@ -252,6 +297,27 @@ public class GameRoundActivityFragment extends Fragment implements AsyncResponse
                 progressBar.setMax(25);
                 progressBarLinearLayout.addView(progressBar);
                 progressBars.put(team.getId(), progressBar);
+            }
+        }*/
+        if (game != null) {
+            for (Team team : game.getTeams()) {
+                switch (team.getColor().toUpperCase()) {
+                    case "RED":
+                        pbRed.setVisibility(View.VISIBLE);
+                        break;
+                    case "BLUE":
+                        pbBlue.setVisibility(View.VISIBLE);
+                        break;
+                    case "GREEN":
+                        pbGreen.setVisibility(View.VISIBLE);
+                        break;
+                    case "YELLOW":
+                        pbYellow.setVisibility(View.VISIBLE);
+                        break;
+                    default:
+                        break;
+
+                }
             }
         }
 

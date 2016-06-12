@@ -15,18 +15,9 @@
         android:layout_height="wrap_content"
         android:text="correct"
         android:id="@+id/correctButton"
-        android:layout_alignTop="@+id/wrongButton"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="wrong"
-        android:id="@+id/wrongButton"
-        android:layout_marginBottom="102dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/progressLinearLayout" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -35,7 +26,50 @@
         android:id="@+id/progressLinearLayout"
         android:layout_above="@+id/correctButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="20dp">
+
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBarYellow"
+            android:progressTint="#d0da14"
+
+            android:max="25"
+            android:minHeight="25dp"
+            android:paddingTop="5dp" />
+
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBarGreen"
+            android:progressTint="#41a250"
+            android:max="25"
+            android:minHeight="25dp"
+            android:paddingTop="5dp" />
+
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBarBlue"
+            android:progressTint="#1d1de1"
+            android:max="25"
+            android:minHeight="25dp"
+            android:paddingTop="5dp" />
+
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBarRed"
+            android:indeterminate="false"
+            android:progressTint="#cc1717"
+            android:max="25"
+            android:minHeight="25dp"
+            android:paddingTop="5dp" />
 
     </LinearLayout>
 
@@ -52,7 +86,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/currentTeam"
-            android:gravity="center" />
+            android:gravity="center"
+             />
     </LinearLayout>
 
     <TextView
@@ -65,63 +100,18 @@
         android:layout_alignParentStart="true"
         android:gravity="center"
         android:padding="10dp"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/points"
-        android:layout_below="@+id/roundQuestion"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:width="50dp"
-        android:height="50dp"
-        android:gravity="center"
-        android:textSize="40sp"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/draw"
-        android:layout_alignTop="@+id/points"
-        android:layout_alignRight="@+id/roundQuestion"
-        android:layout_alignEnd="@+id/roundQuestion"
-        android:minHeight="50dp"
-        android:visibility="invisible"
-        android:src="#f196c7" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/talk"
-        android:minHeight="50dp"
-        android:minWidth="50dp"
-        android:layout_below="@+id/roundQuestion"
-        android:layout_toLeftOf="@+id/draw"
-        android:layout_toStartOf="@+id/draw"
-        android:visibility="invisible"
-        android:src="#5f9d57" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/mime"
-        android:layout_below="@+id/roundQuestion"
-        android:layout_toLeftOf="@+id/talk"
-        android:layout_toStartOf="@+id/talk"
-        android:minHeight="50dp"
-        android:visibility="invisible"
-        android:src="#9e6b9a" />
+        android:layout_marginBottom="10dp" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/points"
+        android:id="@+id/timerLinearLayout"
+        android:layout_below="@+id/imageRelativeLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/timerLinearLayout">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/timer"
@@ -136,5 +126,83 @@
             android:text="start"
             android:id="@+id/timerButton" />
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="wrong"
+        android:id="@+id/wrongButton"
+        android:layout_gravity="right"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/progressLinearLayout"
+        android:layout_alignEnd="@+id/progressLinearLayout" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageRelativeLayout"
+        android:layout_below="@+id/roundQuestion"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/draw"
+            android:src="@drawable/ic_options_pen"
+            android:minHeight="75dp"
+            android:minWidth="75dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/talk"
+            android:layout_toStartOf="@+id/talk" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/talk"
+            android:src="@drawable/ic_options_talk"
+            android:minWidth="75dp"
+            android:minHeight="75dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/mime"
+            android:src="@drawable/ic_options_mime"
+            android:minHeight="75dp"
+            android:minWidth="75dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/draw"
+            android:layout_toStartOf="@+id/draw" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/points"
+            android:gravity="center"
+            android:textIsSelectable="true"
+            android:textSize="55dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="points"
+            android:id="@+id/textView2"
+            android:textStyle="bold"
+            android:layout_alignBottom="@+id/points"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="5dp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
